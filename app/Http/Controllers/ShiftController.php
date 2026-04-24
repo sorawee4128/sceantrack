@@ -41,7 +41,7 @@ class ShiftController extends Controller
                     'color' => $shift->shift_type->value == 'day' ? '#2563eb' : '#111827',
                      'extendedProps' => [
                         'shift_type' => $shift->shift_type,
-                        'short_type' => $shift->shift_type->value == 'day' ? 'กลางวัน' : 'กลางคืน',
+                        'short_type' => $shift->shift_type->value == 'day' ? 'กะกลางวัน (08:00 - 16:00)' : 'กะกลางคืน (16:00 - 08:00)',
                         'doctor_short' => $shift->doctor?->full_name ?? '',
                         'assistant_short' => $shift->assistant?->full_name ?? '',
                         'edit_url' => route('shifts.edit', $shift),

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Scene Cases'])
+@extends('layouts.app', ['title' => 'ข้อมูลการชันสูตรศพ'])
 
 @section('content')
 <div class="card">
@@ -12,19 +12,19 @@
             </select> -->
             <button class="btn btn-secondary">ค้นหา</button>
         </form>
-        <a href="{{ route('scene-cases.create') }}" class="btn btn-primary">+ เพิ่ม Scene Case</a>
+        <a href="{{ route('scene-cases.create') }}" class="btn btn-primary">+ ลงข้อมูลการชันสูตรศพ</a>
     </div>
 
     <div class="table-wrap">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Scene No</th>
+                    <th>หมายเลขชันสูตรศพ</th>
                     <th>วันที่</th>
                     <th>ชื่อผู้เสียชีวิต</th>
                     <th>สถานีตำรวจ</th>
                     <th>การจัดการศพ</th>
-                    <th>Doctor / Assistant</th>
+                    <th>แพทย์ / ผู้ช่วยแพทย์</th>
                     <th></th>
                 </tr>
             </thead>
@@ -37,8 +37,8 @@
                         <td>{{ $case->policeStation->name }}</td>
                         <td>{{ $case->bodyHandling->name }}</td>
                         <td>
-                            <div>Dr. {{ $case->doctor?->displayName() }}</div>
-                            <div>Asst. {{ $case->assistant?->displayName() }}</div>
+                            <div>- แพทย์. {{ $case->doctor?->displayName() }}</div>
+                            <div>- ผู้ช่วยแพทย์. {{ $case->assistant?->displayName() }}</div>
                         </td>
                         <td class="text-right">
                             <div class="flex flex-wrap justify-end gap-2">

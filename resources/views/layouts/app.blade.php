@@ -21,8 +21,8 @@
                         ☰
                     </button>
                     <div>
-                        <p class="text-sm text-slate-500">ระบบจัดการตารางเวรและ Scene Case</p>
-                        <h1 class="text-lg font-semibold">{{ $title ?? 'Dashboard' }}</h1>
+                        <p class="text-sm text-slate-500">ระบบจัดการตารางเวรและข้อมูลการชันสูตรศพ</p>
+                        <h1 class="text-lg font-semibold">{{ $title ?? 'หน้าหลัก' }}</h1>
                     </div>
                 </div>
                 <div class="text-right text-sm">

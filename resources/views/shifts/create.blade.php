@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Create Shift'])
+@extends('layouts.app', ['title' => 'สร้างตารางเวรออกชันสูตรพลิกศพ'])
 
 @section('content')
 <div class="card">

@@ -23,7 +23,7 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">หมายเลขซีน</label>
+                <label class="form-label">หมายเลขชันสูตรศพ</label>
                 <input
                     type="text"
                     name="scene_no"
@@ -33,12 +33,12 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Doctor</label>
+                <label class="form-label">แพทย์</label>
                 <input type="text" x-model="doctorName" class="form-input bg-slate-50" readonly>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Assistant</label>
+                <label class="form-label">ผู้ช่วยแพทย์</label>
                 <input type="text" x-model="assistantName" class="form-input bg-slate-50" readonly>
             </div>
         </div>

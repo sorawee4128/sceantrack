@@ -10,8 +10,8 @@ enum ShiftType: string
     public function label(): string
     {
         return match ($this) {
-            self::DAY => 'กะกลางวัน',
-            self::NIGHT => 'กะกลางคืน',
+            self::DAY => 'กะกลางวัน (08:00 - 16:00)',
+            self::NIGHT => 'กะกลางคืน (16:00 - 08:00)',
         };
     }
 

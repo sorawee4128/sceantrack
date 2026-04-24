@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Shift Calendar'])
+@extends('layouts.app', ['title' => 'ตารางเวรออกชันสูตรพลิกศพ'])
 
 @push('styles')
 <style>
@@ -119,7 +119,7 @@
 <div class="calendar-wrap">
     <div class="card calendar-card">
         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h2 class="text-lg font-semibold">Calendar</h2>
+            <h2 class="text-lg font-semibold">ปฏิทิน</h2>
             <a href="{{ route('shifts.create') }}" class="btn btn-primary">+ เพิ่มกะเวร</a>
         </div>
 
@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendar');
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'th',
         initialView: 'dayGridMonth',
         height: 'auto',
         expandRows: true,
@@ -144,6 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
             left: 'prev,next today',
             center: 'title',
             right: ''
+        },
+        buttonText: {
+            today: 'วันนี้'
         },
         eventClick(info) {
             if (info.event.extendedProps.edit_url) {
@@ -174,19 +178,26 @@ document.addEventListener('DOMContentLoaded', function () {
     if (doctor) {
         const doctorEl = document.createElement('div');
         doctorEl.className = 'shift-event-name';
-        doctorEl.textContent = `Dr. ${doctor}`;
+        doctorEl.textContent = `แพทย์. ${doctor}`;
         wrapper.appendChild(doctorEl);
     }
 
     if (assistant) {
         const assistantEl = document.createElement('div');
         assistantEl.className = 'shift-event-name';
-        assistantEl.textContent = `Asst. ${assistant}`;
+        assistantEl.textContent = `ผู้ช่วยแพทย์. ${assistant}`;
         wrapper.appendChild(assistantEl);
     }
 
     return { domNodes: [wrapper] };
-}
+},
+    eventOrder: function(a, b) {
+
+        const order = { day: 1, night: 2 }; // กลางวันก่อนกลางคืน
+
+        return order[a.extendedProps.shift_type] - order[b.extendedProps.shift_type];
+
+    },
     });
 
     calendar.render();
