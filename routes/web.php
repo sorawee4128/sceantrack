@@ -17,6 +17,7 @@ use App\Http\Controllers\MasterData\AutopsyAssistantController;
 use App\Http\Controllers\MasterData\PhotoAssistantController;
 use App\Http\Controllers\AutopsyCaseController;
 use App\Http\Controllers\ApproveAutopsyCaseController;
+use App\Http\Controllers\AutopsyReportController;
 use App\Http\Controllers\SceneServiceFeeController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,8 @@ Route::middleware(['auth', 'active'])->group(function () {
         return redirect()->route('dashboard');
     })->name('home');
 
+    Route::get('/scene-service-fee/pdf/{role}', [SceneServiceFeeController::class, 'pdf'])
+    ->name('scene-service-fee.pdf');
 
     Route::resource('scene-cases', SceneCaseController::class);
     Route::get('scene-case-shifts/{shift}', [SceneCaseController::class, 'shiftInfo'])->name('scene-cases.shift-info');
@@ -46,16 +49,19 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::resource('autopsy-cases', AutopsyCaseController::class)->except(['create','destroy','show']);
         });
 
+        Route::get('/autopsy-reports', [AutopsyReportController::class, 'index'])
+    ->name('autopsy-reports.index');
         Route::get('autopsy-cases/{autopsyCase}', [AutopsyCaseController::class,'show'])->name('autopsy-cases.show');
         Route::get('approve-autopsy-cases', [ApproveAutopsyCaseController::class,'index'])->name('approve-autopsy-cases.index');
         Route::get('approve-autopsy-cases/{autopsy_id}', [ApproveAutopsyCaseController::class,'submitted'])->name('approve-autopsy-cases.submitted');
     });
 
     Route::middleware('permission:manage shifts')->group(function () {
-        Route::get('/shifts-events', [ShiftController::class, 'events'])->name('shifts.events');
         Route::resource('shifts', ShiftController::class)->except(['show']);
         Route::post('/shifts/auto-generate-year', [ShiftController::class, 'autoGenerateYear'])->name('shifts.auto-generate-year');
     });
+    Route::get('/shifts-events', [ShiftController::class, 'events'])->name('shifts.events');
+
 
     Route::middleware('role_or_permission:admin|view all reports|view own reports')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

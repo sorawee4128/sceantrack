@@ -27,12 +27,17 @@ class ShiftController extends Controller
 
     public function events(Request $request)
     {
-        $this->authorize('viewAny', Shift::class);
-
+        $userId = $request->user()->id;
         $events = Shift::query()
             ->with(['doctor', 'assistant'])
             ->when($request->filled('start'), fn ($query) => $query->whereDate('shift_date', '>=', $request->start))
             ->when($request->filled('end'), fn ($query) => $query->whereDate('shift_date', '<=', $request->end))
+            ->when($request->boolean('my_only'), function ($query) use ($userId) {
+                $query->where(function ($q) use ($userId) {
+                    $q->where('doctor_user_id', $userId)
+                    ->orWhere('assistant_user_id', $userId);
+                });
+            })
             ->get()
             ->map(function (Shift $shift) {
                 return [
@@ -41,16 +46,17 @@ class ShiftController extends Controller
                     'start' => $shift->shift_date->format('Y-m-d'),
                     'allDay' => true,
                     'color' => $shift->shift_type->value == 'day' ? '#2563eb' : '#111827',
-                     'extendedProps' => [
+                    'extendedProps' => [
                         'shift_type' => $shift->shift_type,
-                        'short_type' => $shift->shift_type->value == 'day' ? 'กะกลางวัน (08:00 - 16:00)' : 'กะกลางคืน (16:00 - 08:00)',
+                        'short_type' => $shift->shift_type->value == 'day'
+                            ? 'กะกลางวัน (08:00 - 16:00)'
+                            : 'กะกลางคืน (16:00 - 08:00)',
                         'doctor_short' => $shift->doctor?->full_name ?? '',
                         'assistant_short' => $shift->assistant?->full_name ?? '',
                         'edit_url' => route('shifts.edit', $shift),
                     ],
                 ];
             });
-
         return response()->json($events);
     }
 

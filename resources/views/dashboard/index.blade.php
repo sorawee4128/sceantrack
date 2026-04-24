@@ -141,8 +141,16 @@
     <div class="card calendar-card">
         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="text-lg font-semibold">ปฏิทิน</h2>
+            <label class="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-600">
+                <input 
+                    type="checkbox" 
+                    id="calendar_my_only"
+                    class="h-4 w-4"
+                    {{ request('my_only') ? 'checked' : '' }}
+                >
+                เฉพาะฉัน
+            </label>
         </div>
-
         <div id="calendar" class="shift-calendar"></div>
     </div>
 </div>
@@ -282,7 +290,14 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         height: 'auto',
         expandRows: true,
-        events: '{{ route('shifts.events') }}',
+        events: {
+            url: '{{ route('shifts.events') }}',
+            extraParams: function () {
+                return {
+                    my_only: document.getElementById('calendar_my_only')?.checked ? 1 : 0
+                };
+            }
+        },
         dayMaxEvents: 3,
         headerToolbar: {
             left: 'prev,next today',
@@ -343,6 +358,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     calendar.render();
+    document.getElementById('calendar_my_only')?.addEventListener('change', function () {
+        calendar.refetchEvents();
+    });
 
     setTimeout(() => calendar.updateSize(), 100);
     window.addEventListener('load', () => calendar.updateSize());

@@ -45,7 +45,32 @@
 
     </form>
 
-    <div class="table-wrap">
+<div class="flex justify-end gap-2 mb-3">
+
+    @if(auth()->user()->hasRole('doctor') || auth()->user()->hasRole('admin'))
+        <a href="{{ route('scene-service-fee.pdf', [
+                'role' => 'doctor',
+                'month' => request('month')
+            ]) }}"
+            class="btn btn-secondary"
+            target="_blank">
+            พิมพ์ PDF แพทย์
+        </a>
+    @endif
+
+    @if(auth()->user()->hasRole('assistant') || auth()->user()->hasRole('admin'))
+        <a href="{{ route('scene-service-fee.pdf', [
+                'role' => 'assistant',
+                'month' => request('month')
+            ]) }}"
+            class="btn btn-secondary"
+            target="_blank">
+            พิมพ์ PDF ผู้ช่วยแพทย์
+        </a>
+    @endif
+</div>
+
+    <div class="mt-2 table-wrap">
         <table class="table">
             <thead>
                 <tr>

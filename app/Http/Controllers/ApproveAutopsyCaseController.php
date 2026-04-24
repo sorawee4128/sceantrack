@@ -6,6 +6,7 @@ use App\Models\AutopsyCase;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 
 class ApproveAutopsyCaseController extends Controller
@@ -58,21 +59,46 @@ class ApproveAutopsyCaseController extends Controller
 
     public function submitted(Request $request)
     {
-        $cases = AutopsyCase::where('id',$request->autopsy_id)->first();
+        $case = AutopsyCase::with([
+            'policeStation',
+            'scene',
+            'doctor',
+            'lab',
+        ])->findOrFail($request->autopsy_id);
         $status = 'submitted';
-        if ($cases->status == 'submitted') {
-           $status = 'approve';
-        } 
-        $cases->status = $status;
-        $cases->update();
+        if ($case->status === 'submitted') {
+            $status = 'approve';
+        }
 
-        if ($cases->status == 'approve') {
-            Mail::raw('Test Email จาก Forensics', function ($message) use ($cases){
-                $message->to($cases->policeStation->email)
-                    ->subject('ทดสอบ');
+        $case->status = $status;
+        $case->save();
+        if ($case->status === 'approve') {
+            if (! $case->policeStation?->email) {
+                return redirect()
+                    ->route('approve-autopsy-cases.index')
+                    ->with('error', 'อนุมัติแล้ว แต่ไม่พบอีเมลสถานีตำรวจ');
+            }
+
+            $pdf = Pdf::loadView('approve-autopsy-cases.notice-pdf', [
+                'case' => $case,
+            ])->setPaper('a4', 'portrait');
+            Mail::send('emails.autopsy-approved', [
+                'case' => $case,
+            ], function ($message) use ($case, $pdf) {
+                $message->to($case->policeStation->email)
+                    ->subject('แจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์ เลขที่ ' . $case->autopsy_no)
+                    ->attachData(
+                        $pdf->output(),
+                        'แจ้งเตือนสถานะรายงาน-' . $case->autopsy_no . '.pdf',
+                        [
+                            'mime' => 'application/pdf',
+                        ]
+                    );
             });
         }
 
-        return redirect()->route('approve-autopsy-cases.index');
+        return redirect()
+            ->route('approve-autopsy-cases.index')
+            ->with('success', 'อัปเดตสถานะเรียบร้อยแล้ว');
     }
 }

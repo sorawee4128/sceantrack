@@ -49,6 +49,12 @@ style="height: 70%;width: 25%;"
                class="{{ $linkClass }} {{ request()->routeIs('reports.*') ? $activeClass : $inactiveClass }}">
                 สรุปรายการชันสูตรพลิกศพ
             </a>
+
+            <a href="{{ route('autopsy-reports.index') }}"
+               class="{{ $linkClass }} {{ request()->routeIs('autopsy-reports.*') ? $activeClass : $inactiveClass }}">
+                สรุปรายการข้อมูลการผ่าชันสูตรศพ
+            </a>
+
         @endcanany
 
         @if(!auth()->user()->hasRole('doctor'))
