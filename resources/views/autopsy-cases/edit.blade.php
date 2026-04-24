@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Edit Autopsy Case'])
+@extends('layouts.app', ['title' => 'แก้ไขรายการข้อมูลการผ่าชันสูตรศพ'])
 
 @section('content')
 <div class="card">
@@ -20,7 +20,7 @@
                 type="submit"
                 class="btn btn-primary"
                 :disabled="submitting"
-                x-text="submitting ? 'Submitting...' : 'Submit'"
+                x-text="submitting ? 'กำลังบันทึก...' : 'บันทึก'"
             ></button>
 
             <a

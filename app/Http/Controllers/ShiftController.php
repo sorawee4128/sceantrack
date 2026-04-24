@@ -7,7 +7,9 @@ use App\Http\Requests\Shifts\UpdateShiftRequest;
 use App\Models\Shift;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\CarbonPeriod;
+use App\Enums\ShiftType;
 class ShiftController extends Controller
 {
     public function index()
@@ -99,5 +101,52 @@ class ShiftController extends Controller
         $shift->delete();
 
         return redirect()->route('shifts.index')->with('success', 'ลบกะเวรเรียบร้อยแล้ว');
+    }
+
+    public function autoGenerateYear(Request $request)
+    {
+        $this->authorize('manage shifts');
+        $year = $request->input('year', now()->year);
+        $doctors = User::role('doctor')->get();
+        $assistants = User::role('assistant')->get();
+        if ($doctors->isEmpty() || $assistants->isEmpty()) {
+            return back()->with('error', 'ไม่พบข้อมูลแพทย์หรือผู้ช่วยแพทย์');
+        }
+
+        $created = 0;
+        $skipped = 0;
+        DB::transaction(function () use ($year, $doctors, $assistants, &$created, &$skipped) {
+            $period = CarbonPeriod::create(
+                "{$year}-01-01",
+                "{$year}-12-31"
+            );
+            foreach ($period as $date) {
+                foreach ([ShiftType::DAY, ShiftType::NIGHT] as $shiftType) {
+                    $exists = Shift::whereDate('shift_date', $date)
+                        ->where('shift_type', $shiftType->value)
+                        ->exists();
+                    if ($exists) {
+                        $skipped++;
+                        continue;
+                    }
+                    $doctor = $doctors->random();
+                    $assistant = $assistants->random();
+                    Shift::create([
+                        'shift_date' => $date->format('Y-m-d'),
+                        'shift_type' => $shiftType->value,
+                        'doctor_user_id' => $doctor->id,
+                        'assistant_user_id' => $assistant->id,
+                        'created_by' => auth()->id(),
+                        'updated_by' => auth()->id(),
+                    ]);
+                    $created++;
+                }
+            }
+        });
+
+        return back()->with(
+            'success',
+            "สร้างเวรปี {$year} เรียบร้อยแล้ว: เพิ่ม {$created} รายการ, ข้าม {$skipped} รายการ"
+        );
     }
 }

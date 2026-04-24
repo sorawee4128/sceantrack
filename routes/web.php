@@ -42,7 +42,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('permission:manage autopsy cases')->group(function () {
         Route::middleware('role_or_permission:staff')->group(function () {
              Route::get('scene-cases/{scene}/autopsy-cases/create', [AutopsyCaseController::class, 'create'])
-        ->name('scene-cases.autopsy-cases.create');
+        ->name('autopsy-cases.scene-cases.create');
         Route::resource('autopsy-cases', AutopsyCaseController::class)->except(['create','destroy','show']);
         });
 
@@ -54,6 +54,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('permission:manage shifts')->group(function () {
         Route::get('/shifts-events', [ShiftController::class, 'events'])->name('shifts.events');
         Route::resource('shifts', ShiftController::class)->except(['show']);
+        Route::post('/shifts/auto-generate-year', [ShiftController::class, 'autoGenerateYear'])->name('shifts.auto-generate-year');
     });
 
     Route::middleware('role_or_permission:admin|view all reports|view own reports')->group(function () {

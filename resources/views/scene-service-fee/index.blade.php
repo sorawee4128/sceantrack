@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Scene Service Fee'])
+@extends('layouts.app', ['title' => 'คำนวนค่าตอบแทน'])
 
 @section('content')
 
@@ -35,11 +35,11 @@
         {{-- BUTTON --}}
         <div class="flex gap-2 pt-5">
             <button type="submit" class="btn btn-primary">
-                Filter
+                ค้นหา
             </button>
 
             <a href="{{ route('scene-service-fee.index') }}" class="btn btn-secondary">
-                Reset
+                ล้างค่า
             </a>
         </div>
 
@@ -94,6 +94,17 @@
                     </tr>
                 @endforelse
             </tbody>
+            <tfoot>
+                <tr class="border-t-4 border-slate-900 bg-white text-lg font-bold text-red-500">
+                    <td class="px-4 py-4">ยอดรวม</td>
+                    <td class="px-4 py-4">{{ $totals['n'] }}</td>
+                    <td class="px-4 py-4">{{ $totals['f'] }}</td>
+                    <td class="px-4 py-4">{{ $totals['o'] }}</td>
+                    <td class="px-4 py-4">{{ $totals['i'] }}</td>
+                    <td class="px-4 py-4">{{ $totals['sum'] }}</td>
+                    <td class="px-4 py-4">{{ number_format($totals['fee']) }}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 

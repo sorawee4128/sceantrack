@@ -1,18 +1,18 @@
 <div x-data="sceneCaseForm()" class="space-y-6">
     <div class="form-section">
         <div class="mb-4">
-            <h2 class="card-title">บันทึกข้อมูล Autopsy</h2>
+            <h2 class="card-title">บันทึกข้อมูลการผ่าชันสูตรศพ</h2>
         </div>
 
         <div class="form-group">
-            <label class="form-label">ประเภท autopsy</label>
+            <label class="form-label">ประเภทการผ่าชันสูตรศพ</label>
             <input type="text"  value="{{ $sceneCase->bodyHandling->name }}" class="form-input" readonly>
         </div>
 
         <div class="mt-4 form-grid">
           
             <div class="form-group">
-                <label class="form-label">หมายเลข Autopsy</label>
+                <label class="form-label">หมายเลขการผ่าชันสูตรศพ</label>
                 <input type="text" name="autopsy_no" value="{{ old('autopsy_no', isset($autopsyCase->autopsy_no) ? substr($autopsyCase->autopsy_no, 2) : '') }}" class="form-input">
                 <input type="text" name="scene_case_id" value="{{ $sceneCase->id }}" class="form-input" hidden>
                  <input type="text" name="body_handling_code" value="{{ $sceneCase->bodyHandling->code }}" class="form-input" hidden>

@@ -57,7 +57,19 @@ class SceneServiceFeeController extends Controller
             return $target;
         });
 
+        $totals = [
+            'n' => $targets->sum('n'),
+            'f' => $targets->sum('f'),
+            'o' => $targets->sum('o'),
+            'i' => $targets->sum('i'),
+            'sum' => $targets->sum('sum'),
+            'fee' => $targets->sum(function ($user) {
+                return is_numeric(str_replace(',', '', $user->fee))
+                    ? (int) str_replace(',', '', $user->fee)
+                    : 0;
+            }),
+        ];
 
-        return view('scene-service-fee.index', compact('targets'));
+        return view('scene-service-fee.index', compact('targets', 'totals'));
     }
 }

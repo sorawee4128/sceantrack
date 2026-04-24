@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Pending Autopsy Cases'])
+@extends('layouts.app', ['title' => 'รายการข้อมูลการผ่าชันสูตรศพ'])
 
 @section('content')
 <div class="card">
@@ -13,12 +13,12 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Scene No</th>
+                    <th>หมายเลขชันสูตรศพ</th>
                     <th>วันที่</th>
                     <th>ชื่อผู้เสียชีวิต</th>
                     <th>สถานีตำรวจ</th>
                     <th>การจัดการศพ</th>
-                    <th>Doctor / Assistant</th>
+                    <th>แพทย์ / ผู้ช่วยแพทย์</th>
                     <th></th>
                 </tr>
             </thead>
@@ -31,11 +31,11 @@
                         <td>{{ $case->policeStation->name }}</td>
                         <td>{{ $case->bodyHandling->name }}</td>
                         <td>
-                            <div>Dr. {{ $case->doctor?->displayName() }}</div>
-                            <div>Asst. {{ $case->assistant?->displayName() }}</div>
+                            <div>แพทย์. {{ $case->doctor?->displayName() }}</div>
+                            <div>ผู้ช่วยแพทย์. {{ $case->assistant?->displayName() }}</div>
                         </td>
                         <td class="text-right">
-                            <a href="{{ route('scene-cases.autopsy-cases.create', $case->id) }}" class="btn btn-secondary">
+                            <a href="{{ route('autopsy-cases.scene-cases.create', $case->id) }}" class="btn btn-secondary">
                                 คลิกเพื่อใส่ข้อมูล
                             </a>
                         </td>

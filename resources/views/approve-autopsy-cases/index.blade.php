@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Pending Autopsy Cases'])
+@extends('layouts.app', ['title' => 'สถานะรายงานการผ่าชันสูตรศพ'])
 
 @section('content')
 <div class="card">
@@ -48,13 +48,13 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Autopsy Date</th>
-                    <th>Autopsy Number</th>
-                    <th>Name</th>
-                    <th>Doctor</th>
-                    <th>Lab</th>
-                    <th>Note</th>
-                    <th>Status</th>
+                    <th>วันที่ผ่าชันสูตรศพ</th>
+                    <th>หมายเลขผ่าชันสูตรศพ</th>
+                    <th>ชื่อผู้เสียชีวิต</th>
+                    <th>แพทย์</th>
+                    <th>รายการตรวจห้องปฎิบัติการ</th>
+                    <th>หมายเหตุ</th>
+                    <th>สถานะ</th>
                     <th></th>
                 </tr>
             </thead>
@@ -97,11 +97,18 @@
                                 <a href="{{ route('autopsy-cases.show', $case) }}" class="btn btn-secondary">
                                     ดู
                                 </a>
-                            @elseif(auth()->user()->hasRole('doctor'))
-                                    <a href="{{ route('autopsy-cases.show', $case) }}" class="btn btn-secondary">
-                                      ดู
-                                    </a>
+                            @elseif(auth()->user()->hasRole('doctor') || auth()->user()->hasRole('admin'))
+                                <a href="{{ route('autopsy-cases.show', $case) }}" class="btn btn-secondary">
+                                    ดู
+                                </a>
                             @endif
+                                @if(auth()->user()->hasRole('admin'))
+                                <br>
+                                <br>
+                                    <a href="{{ route('autopsy-cases.edit', $case->id) }}" class="btn btn-secondary">
+                                      แก้ไข
+                                    </a>
+                                @endif
                             @if($case->canAction)
                                 @if(auth()->user()->hasRole('staff'))
                                     <a href="{{ route('autopsy-cases.edit', $case->id) }}" class="btn btn-secondary">

@@ -120,6 +120,13 @@
     <div class="card calendar-card">
         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="text-lg font-semibold">ปฏิทิน</h2>
+            <form method="POST" action="{{ route('shifts.auto-generate-year') }}">
+                @csrf
+                <input type="hidden" name="year" value="{{ request('year', now()->year) }}">
+                <button class="btn btn-primary">
+                    Auto Generate เวรทั้งปี
+                </button>
+            </form>
             <a href="{{ route('shifts.create') }}" class="btn btn-primary">+ เพิ่มกะเวร</a>
         </div>
 
