@@ -12,7 +12,7 @@
 
     <div class="table-wrap">
         <table class="table">
-            <thead><tr><th>Code</th><th>Name</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>รหัส</th><th>ชื่อ</th><th>สถานะ</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200">
                 @forelse ($items as $item)
                     <tr>
@@ -25,7 +25,7 @@
                                 <form method="POST" action="{{ route($routePrefix.'.destroy', $item) }}" onsubmit="return confirm('ยืนยันการลบ?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger">ลบ/Inactive</button>
+                                    <button class="btn btn-danger">ลบ/ปิดการใช้งาน</button>
                                 </form>
                             </div>
                         </td>

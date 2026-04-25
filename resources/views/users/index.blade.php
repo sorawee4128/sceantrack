@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'User Management'])
+@extends('layouts.app', ['title' => 'ผู้ใช้ระบบ'])
 
 @section('content')
 <div class="card">
@@ -14,9 +14,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ชื่อ</th>
-                    <th>Username</th>
-                    <th>Role</th>
+                    <th>ชื่อ/อีเมล</th>
+                    <th>ชื่อแสดงในระบบ</th>
+                    <th>บทบาท</th>
                     <th>สถานะ</th>
                     <th></th>
                 </tr>

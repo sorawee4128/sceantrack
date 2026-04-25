@@ -1,18 +1,18 @@
-@extends('layouts.app', ['title' => 'Roles'])
+@extends('layouts.app', ['title' => 'บทบาท'])
 
 @section('content')
 <div class="card">
     <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <form class="flex gap-2">
-            <input type="text" name="q" value="{{ request('q') }}" placeholder="ค้นหา role..." class="input md:w-80">
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="ค้นหา บทบาท..." class="input md:w-80">
             <button class="btn btn-secondary">ค้นหา</button>
         </form>
-        <a href="{{ route('roles.create') }}" class="btn btn-primary">+ เพิ่ม Role</a>
+        <a href="{{ route('roles.create') }}" class="btn btn-primary">+ เพิ่มบทบาท</a>
     </div>
 
     <div class="table-wrap">
         <table class="table">
-            <thead><tr><th>Name</th><th>Permissions</th><th></th></tr></thead>
+            <thead><tr><th>ชื่อ</th><th>สิทธิ์</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200">
                 @forelse ($roles as $role)
                     <tr>

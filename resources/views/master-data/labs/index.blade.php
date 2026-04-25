@@ -14,8 +14,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Status</th>
+                    <th>ชื่อ</th>
+                    <th>สถานะ</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
                                 <form method="POST" action="{{ route($routePrefix.'.destroy', $item) }}" onsubmit="return confirm('ยืนยันการลบ?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger">ลบ/Inactive</button>
+                                    <button class="btn btn-danger">ลบ/ปิดการใช้งาน</button>
                                 </form>
                             </div>
                         </td>

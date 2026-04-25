@@ -1,18 +1,18 @@
-@extends('layouts.app', ['title' => 'Permissions'])
+@extends('layouts.app', ['title' => 'สิทธิ์'])
 
 @section('content')
 <div class="card">
     <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <form class="flex gap-2">
-            <input type="text" name="q" value="{{ request('q') }}" placeholder="ค้นหา permission..." class="input md:w-80">
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="ค้นหา สิทธิ์..." class="input md:w-80">
             <button class="btn btn-secondary">ค้นหา</button>
         </form>
-        <a href="{{ route('permissions.create') }}" class="btn btn-primary">+ เพิ่ม Permission</a>
+        <a href="{{ route('permissions.create') }}" class="btn btn-primary">+ เพิ่มสิทธิ์</a>
     </div>
 
     <div class="table-wrap">
         <table class="table">
-            <thead><tr><th>Name</th><th></th></tr></thead>
+            <thead><tr><th>ชื่อสิทธิ์</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200">
                 @forelse ($permissions as $permission)
                     <tr>

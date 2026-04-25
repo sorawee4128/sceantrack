@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Edit Permission'])
+@extends('layouts.app', ['title' => 'แก้ไขสิทธิ์'])
 
 @section('content')
 <div class="card">

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Edit User'])
+@extends('layouts.app', ['title' => 'แก้ไขผู้ใช้ระบบ'])
 
 @section('content')
 <div class="card">

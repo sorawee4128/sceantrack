@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Create User'])
+@extends('layouts.app', ['title' => 'สร้างผู้ใช้ระบบ'])
 
 @section('content')
 <div class="card">

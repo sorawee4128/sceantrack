@@ -81,63 +81,63 @@ style="height: 70%;width: 25%;"
         @endcan
 
         @can('manage users')
-            <div class="{{ $sectionClass }}">Admin</div>
+            <div class="{{ $sectionClass }}">ผู้ดูแลระบบ</div>
             <a href="{{ route('users.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('users.*') ? $activeClass : $inactiveClass }}">
-                Users
+                ผู้ใช้ระบบ
             </a>
         @endcan
 
         @can('manage roles')
             <a href="{{ route('roles.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('roles.*') ? $activeClass : $inactiveClass }}">
-                Roles
+                บทบาท
             </a>
         @endcan
 
         @can('manage permissions')
             <a href="{{ route('permissions.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('permissions.*') ? $activeClass : $inactiveClass }}">
-                Permissions
+                สิทธิ์
             </a>
         @endcan
 
         @can('manage master data')
-            <div class="{{ $sectionClass }}">Master Data</div>
+            <div class="{{ $sectionClass }}">ข้อมูลหลัก</div>
 
             <a href="{{ route('master-data.police-stations.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.police-stations.*') ? $activeClass : $inactiveClass }}">
-                Police Stations
+                สถานีตำรวจ
             </a>
 
             <a href="{{ route('master-data.body-handlings.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.body-handlings.*') ? $activeClass : $inactiveClass }}">
-                Body Handlings
+                การจัดการศพ
             </a>
 
             <a href="{{ route('master-data.notification-types.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.notification-types.*') ? $activeClass : $inactiveClass }}">
-                Notification Types
+                ประเภทคดีที่แจ้ง
             </a>
 
             <a href="{{ route('master-data.genders.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.genders.*') ? $activeClass : $inactiveClass }}">
-                Genders
+                เพศ
             </a>
 
             <a href="{{ route('master-data.labs.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.labs.*') ? $activeClass : $inactiveClass }}">
-                Labs
+                การตรวจทางห้องปฎิบัติการ
             </a>
 
             <a href="{{ route('master-data.autopsy-assistants.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.autopsy-assistants.*') ? $activeClass : $inactiveClass }}">
-                Autopsy Assistants
+                ผู้ช่วยแพทย์ผ่าชันสูตรศพ
             </a>
 
             <a href="{{ route('master-data.photo-assistants.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('master-data.photo-assistants.*') ? $activeClass : $inactiveClass }}">
-                Photo Assistants
+                ผู้ช่วยถ่ายภาพ
             </a>
         @endcan
     </nav>
@@ -146,7 +146,7 @@ style="height: 70%;width: 25%;"
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
-                Logout
+                ออกจากระบบ
             </button>
         </form>
     </div>

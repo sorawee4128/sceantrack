@@ -1,6 +1,6 @@
 <div class="grid gap-4 md:grid-cols-2">
     <div>
-        <label class="label">Code</label>
+        <label class="label">รหัส</label>
         <input type="text" name="code" value="{{ old('code', $item->code ?? '') }}" class="input">
     </div>
     <div class="flex items-center gap-2 pt-7">
@@ -11,11 +11,11 @@
 </div>
 
 <div class="mt-4">
-    <label class="label">Name</label>
+    <label class="label">ชื่อ</label>
     <input type="text" name="name" value="{{ old('name', $item->name ?? '') }}" class="input">
 </div>
 
 <div class="mt-4">
-    <label class="label">Description</label>
+    <label class="label">คำอธิบาย</label>
     <textarea name="description" rows="4" class="input">{{ old('description', $item->description ?? '') }}</textarea>
 </div>

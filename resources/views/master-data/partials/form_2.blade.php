@@ -1,5 +1,5 @@
 <div class="mt-4">
-    <label class="label">Name</label>
+    <label class="label">ชื่อ</label>
     <input type="text" name="name" value="{{ old('name', $item->name ?? '') }}" class="input">
 </div>
 <div class="grid gap-4 md:grid-cols-2">
