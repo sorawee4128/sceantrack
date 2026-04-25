@@ -44,17 +44,18 @@ style="height: 70%;width: 25%;"
             </a>
         @endcanany
 
-        @canany(['view all reports', 'view own reports'])
+        @canany(['view all reports scene', 'view own reports scene'])
             <a href="{{ route('reports.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('reports.*') ? $activeClass : $inactiveClass }}">
                 สรุปรายการชันสูตรพลิกศพ
             </a>
+        @endcanany
 
+        @canany(['view all reports autopsy', 'view own reports autopsy'])
             <a href="{{ route('autopsy-reports.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('autopsy-reports.*') ? $activeClass : $inactiveClass }}">
                 สรุปรายการข้อมูลการผ่าชันสูตรศพ
             </a>
-
         @endcanany
 
         @if(!auth()->user()->hasRole('doctor'))
@@ -88,19 +89,21 @@ style="height: 70%;width: 25%;"
             </a>
         @endcan
 
-        @can('manage roles')
-            <a href="{{ route('roles.index') }}"
-               class="{{ $linkClass }} {{ request()->routeIs('roles.*') ? $activeClass : $inactiveClass }}">
-                บทบาท
-            </a>
-        @endcan
+        @if(auth()->user()->hasRole('system'))
+            @can('manage roles')
+                <a href="{{ route('roles.index') }}"
+                class="{{ $linkClass }} {{ request()->routeIs('roles.*') ? $activeClass : $inactiveClass }}">
+                    บทบาท
+                </a>
+            @endcan
 
-        @can('manage permissions')
-            <a href="{{ route('permissions.index') }}"
-               class="{{ $linkClass }} {{ request()->routeIs('permissions.*') ? $activeClass : $inactiveClass }}">
-                สิทธิ์
-            </a>
-        @endcan
+            @can('manage permissions')
+                <a href="{{ route('permissions.index') }}"
+                class="{{ $linkClass }} {{ request()->routeIs('permissions.*') ? $activeClass : $inactiveClass }}">
+                    สิทธิ์
+                </a>
+            @endcan
+        @endif
 
         @can('manage master data')
             <div class="{{ $sectionClass }}">ข้อมูลหลัก</div>

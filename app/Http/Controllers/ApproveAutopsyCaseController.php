@@ -14,7 +14,6 @@ class ApproveAutopsyCaseController extends Controller
     public function index(Request $request)
     {
         $query = AutopsyCase::query()->with(['doctor', 'scene', 'lab']);
-
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -25,7 +24,6 @@ class ApproveAutopsyCaseController extends Controller
 
         if ($request->filled('month')) {
             $month = Carbon::createFromFormat('Y-m', $request->month);
-
             $query->whereBetween('autopsy_date', [
                 $month->copy()->startOfMonth()->toDateString(),
                 $month->copy()->endOfMonth()->toDateString(),
@@ -38,22 +36,44 @@ class ApproveAutopsyCaseController extends Controller
             ->withQueryString();
 
         $user = auth()->user();
-        $cases->getCollection()->transform(function ($case) use ($user) {
-            $canAction = false;
 
-            if ($user->hasRole('doctor') && $case->status === 'submitted' && $user->id == $case->doctor_user_id) {
+        $cases->getCollection()->transform(function ($case) use ($user) {
+            $isExpired = $case->created_at
+                ? $case->created_at->lt(now()->subHours(24))
+                : true;
+            $canAction = false;
+            // system / admin ทำได้เสมอ ไม่ติด 24 ชม.
+            if ($user->hasRole(['system', 'admin'])) {
                 $canAction = true;
             }
 
-            if ($user->hasRole('staff') && $case->status === 'pending') {
+            // staff ทำได้เฉพาะ pending และยังไม่เกิน 24 ชม.
+            elseif (
+                $user->hasRole('staff') &&
+                $case->status === 'pending' &&
+                ! $isExpired
+            ) {
+                $canAction = true;
+            }
+
+            // doctor ทำได้เฉพาะ submitted, เป็นหมอเจ้าของเคส และยังไม่เกิน 24 ชม.
+            elseif (
+                $user->hasRole('doctor') &&
+                $case->status === 'submitted' &&
+                $user->id == $case->doctor_user_id &&
+                ! $isExpired
+            ) {
                 $canAction = true;
             }
 
             $case->canAction = $canAction;
+            $case->isExpired = $isExpired;
+
             return $case;
         });
 
         $doctors = User::role('doctor')->orderBy('name')->get();
+
         return view('approve-autopsy-cases.index', compact('cases', 'doctors'));
     }
 

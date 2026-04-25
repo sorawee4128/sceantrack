@@ -51,7 +51,7 @@ class SceneServiceFeeController extends Controller
             }
 
             $target->fee = '-'; 
-            if (auth()->user()->id == $target->id || auth()->user()->hasRole('admin')) {
+            if (auth()->user()->id == $target->id || auth()->user()->hasRole('system')) {
                 $target->fee = number_format($rate * $target->sum);
             }
 

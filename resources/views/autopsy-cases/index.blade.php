@@ -19,7 +19,9 @@
                     <th>สถานีตำรวจ</th>
                     <th>การจัดการศพ</th>
                     <th>แพทย์ / ผู้ช่วยแพทย์</th>
+                     @if(!auth()->user()->hasRole('admin'))
                     <th></th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200">
@@ -35,9 +37,11 @@
                             <div>ผู้ช่วยแพทย์. {{ $case->assistant?->displayName() }}</div>
                         </td>
                         <td class="text-right">
+                            @if(!auth()->user()->hasRole('admin'))
                             <a href="{{ route('autopsy-cases.scene-cases.create', $case->id) }}" class="btn btn-secondary">
                                 คลิกเพื่อใส่ข้อมูล
                             </a>
+                            @endif
                         </td>
                     </tr>
                 @empty

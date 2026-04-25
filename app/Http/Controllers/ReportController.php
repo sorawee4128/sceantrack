@@ -11,44 +11,60 @@ class ReportController extends Controller
 {
     public function index(ReportFilterRequest $request)
     {
-        $query = SceneCase::query()
-            ->with(['doctor', 'assistant', 'policeStation', 'notificationType']);
-        $query->whereYear('case_date', now()->year);
+    $query = SceneCase::query()
+            ->with(['shift', 'doctor', 'assistant', 'policeStation', 'notificationType']);
+        $query->whereHas('shift', function ($q) {
+            $q->whereYear('shift_date', now()->year);
+        });
+
         if ($request->filled('month')) {
-            $query->whereMonth('case_date', $request->month);
+            $query->whereHas('shift', function ($q) use ($request) {
+                $q->whereMonth('shift_date', $request->month);
+            });
         }
 
         if ($request->filled('from_date')) {
-            $query->whereDate('case_date', '>=', $request->from_date);
+            $query->whereHas('shift', function ($q) use ($request) {
+                $q->whereDate('shift_date', '>=', $request->from_date);
+            });
         }
 
         if ($request->filled('to_date')) {
-            $query->whereDate('case_date', '<=', $request->to_date);
+            $query->whereHas('shift', function ($q) use ($request) {
+                $q->whereDate('shift_date', '<=', $request->to_date);
+            });
         }
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        if (! $request->user()->can('view all reports')) {
+        if (! $request->user()->can('view all reports scene')) {
             $query->where(function ($q) use ($request) {
                 $q->where('doctor_user_id', $request->user()->id)
                     ->orWhere('assistant_user_id', $request->user()->id);
             });
         }
+        
 
         $chartType = $request->get('chart_type', 'management');
-
         $cases = (clone $query)
-            ->latest('case_date')
-            ->paginate(20)
-            ->withQueryString();
+            ->get()
+            ->sortByDesc(fn ($case) => $case->shift?->shift_date)
+            ->values();
+
+        $cases = new \Illuminate\Pagination\LengthAwarePaginator(
+            $cases->forPage(request()->page ?? 1, 20),
+            $cases->count(),
+            20
+        );
 
         $summary = [
             'total' => (clone $query)->count(),
             'draft' => (clone $query)->where('status', SceneCaseStatus::DRAFT->value)->count(),
             'submitted' => (clone $query)->where('status', SceneCaseStatus::SUBMITTED->value)->count(),
         ];
+   
 
         $byNotificationType = (clone $query)
             ->select('notification_type_id', DB::raw('COUNT(*) as total'))

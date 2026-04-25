@@ -168,7 +168,7 @@ class SceneCaseController extends Controller
 
         return [
             'sceneCase' => $sceneCase,
-            'shifts' => $shiftQuery->limit(90)->get(),
+            'shifts' => $shiftQuery->get(),
             'policeStations' => PoliceStation::active()->orderBy('name')->get(),
             'bodyHandlings' => BodyHandling::active()->orderBy('name')->get(),
             'notificationTypes' => NotificationType::active()->orderBy('name')->get(),

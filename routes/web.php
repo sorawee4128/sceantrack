@@ -46,9 +46,8 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::middleware('role_or_permission:staff')->group(function () {
              Route::get('scene-cases/{scene}/autopsy-cases/create', [AutopsyCaseController::class, 'create'])
         ->name('autopsy-cases.scene-cases.create');
-        Route::resource('autopsy-cases', AutopsyCaseController::class)->except(['create','destroy','show']);
         });
-
+        Route::resource('autopsy-cases', AutopsyCaseController::class)->except(['create','destroy','show']);
         Route::get('/autopsy-reports', [AutopsyReportController::class, 'index'])
     ->name('autopsy-reports.index');
         Route::get('autopsy-cases/{autopsyCase}', [AutopsyCaseController::class,'show'])->name('autopsy-cases.show');
@@ -63,7 +62,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/shifts-events', [ShiftController::class, 'events'])->name('shifts.events');
 
 
-    Route::middleware('role_or_permission:admin|view all reports|view own reports')->group(function () {
+    Route::middleware('role_or_permission:system|view all reports scene|view own reports scene')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     });
 

@@ -36,7 +36,8 @@ class SceneCasePolicy
 
         return $user->can('edit own draft')
             && $sceneCase->isOwnedBy($user)
-            && $sceneCase->isDraft();
+            && $sceneCase->isDraft()
+            && $sceneCase->created_at->diffInHours(now()) <= 24;
     }
 
     public function delete(User $user, SceneCase $sceneCase): bool

@@ -336,7 +336,7 @@
                                     {{ $case->scene_no }}
                                 </a>
                             </td>
-                            <td>{{ optional($case->case_date)->format('d/m/Y') }}</td>
+                            <td>{{ optional($case->shift?->shift_date)->format('d/m/Y') }}</td>
                             <td>{{ $case->doctor?->displayName() }} / {{ $case->assistant?->displayName() }}</td>
                             <td>{{ $case->notificationType?->name }}</td>
                             <td>

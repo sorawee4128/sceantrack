@@ -1,17 +1,29 @@
-<x-layouts::auth :title="__('Log in')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
+<x-layouts::auth :title="'เข้าสู่ระบบ'">
+    <div class="w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 p-8 shadow-lg">
+        <div class="mb-7 text-center">
+            <img
+                src="{{ asset('images/logo.png') }}"
+                alt="Forensics Logo"
+                class="mx-auto mb-4 h-28 w-28 object-contain"
+            >
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+            <h1 class="text-2xl font-bold text-slate-900">
+                Forensics
+            </h1>
 
-        <form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-6">
+            <p class="mt-2 text-sm font-medium text-slate-500">
+                ระบบจัดการตารางเวรและข้อมูลการชันสูตรศพ
+            </p>
+        </div>
+
+        <x-auth-session-status class="mb-4 text-center" :status="session('status')" />
+
+        <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
             @csrf
 
-            <!-- Email Address -->
             <flux:input
                 name="email"
-                :label="__('Email address')"
+                label="อีเมล"
                 :value="old('email')"
                 type="email"
                 required
@@ -20,40 +32,42 @@
                 placeholder="email@example.com"
             />
 
-            <!-- Password -->
             <div class="relative">
                 <flux:input
                     name="password"
-                    :label="__('Password')"
+                    label="รหัสผ่าน"
                     type="password"
                     required
                     autocomplete="current-password"
-                    :placeholder="__('Password')"
+                    placeholder="รหัสผ่าน"
                     viewable
                 />
 
                 @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
-                        {{ __('Forgot your password?') }}
+                    <flux:link
+                        class="absolute top-0 end-0 text-sm font-semibold text-slate-500 hover:text-blue-600"
+                        :href="route('password.request')"
+                        wire:navigate
+                    >
+                        ลืมรหัสผ่าน?
                     </flux:link>
                 @endif
             </div>
 
-            <!-- Remember Me -->
-            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" />
+            <flux:checkbox
+                name="remember"
+                label="จดจำฉัน"
+                :checked="old('remember')"
+            />
 
-            <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
-                    {{ __('Log in') }}
-                </flux:button>
-            </div>
+            <flux:button
+                variant="primary"
+                type="submit"
+                class="w-full rounded-xl bg-slate-900 py-3 font-semibold text-white shadow-md hover:bg-slate-800"
+                data-test="login-button"
+            >
+                เข้าสู่ระบบ
+            </flux:button>
         </form>
-
-        @if (Route::has('register'))
-            <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
-                <span>{{ __('Don\'t have an account?') }}</span>
-                <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
-            </div>
-        @endif
     </div>
 </x-layouts::auth>

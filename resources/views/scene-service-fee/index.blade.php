@@ -47,7 +47,7 @@
 
 <div class="flex justify-end gap-2 mb-3">
 
-    @if(auth()->user()->hasRole('doctor') || auth()->user()->hasRole('admin'))
+    @if(auth()->user()->hasRole('doctor') || auth()->user()->hasRole('system'))
         <a href="{{ route('scene-service-fee.pdf', [
                 'role' => 'doctor',
                 'month' => request('month')
@@ -58,7 +58,7 @@
         </a>
     @endif
 
-    @if(auth()->user()->hasRole('assistant') || auth()->user()->hasRole('admin'))
+    @if(auth()->user()->hasRole('assistant') || auth()->user()->hasRole('system'))
         <a href="{{ route('scene-service-fee.pdf', [
                 'role' => 'assistant',
                 'month' => request('month')

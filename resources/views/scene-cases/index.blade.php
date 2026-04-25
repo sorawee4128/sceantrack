@@ -12,7 +12,9 @@
             </select> -->
             <button class="btn btn-secondary">ค้นหา</button>
         </form>
+        @if(!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('doctor'))
         <a href="{{ route('scene-cases.create') }}" class="btn btn-primary">+ ลงข้อมูลการชันสูตรศพ</a>
+        @endif
     </div>
 
     <div class="table-wrap">
@@ -34,8 +36,8 @@
                         <td class="font-medium">{{ $case->scene_no }}</td>
                         <td>{{ optional($case->case_date)->format('d/m/Y') }}</td>
                         <td>{{ $case->deceased_name }}</td>
-                        <td>{{ $case->policeStation->name }}</td>
-                        <td>{{ $case->bodyHandling->name }}</td>
+                        <td>{{ $case->policeStation?->name }}</td>
+                        <td>{{ $case->bodyHandling?->name }}</td>
                         <td>
                             <div>- แพทย์. {{ $case->doctor?->displayName() }}</div>
                             <div>- ผู้ช่วยแพทย์. {{ $case->assistant?->displayName() }}</div>

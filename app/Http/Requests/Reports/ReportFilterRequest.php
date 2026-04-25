@@ -8,7 +8,7 @@ class ReportFilterRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('view all reports') || $this->user()->can('view own reports');
+        return $this->user()->can('view all reports scene') || $this->user()->can('view own reports scene');
     }
 
     public function rules(): array
