@@ -22,12 +22,12 @@
                     </button>
                     <div>
                         <p class="text-sm text-slate-500">ระบบจัดการตารางเวรและข้อมูลการชันสูตรศพ</p>
-                        <h1 class="text-lg font-semibold">{{ $title ?? 'หน้าหลัก' }}</h1>
+                        <h1 class="text-lg font-semibold" style="font-size: 20px;">{{ $title ?? 'หน้าหลัก' }}</h1>
                     </div>
                 </div>
                 <div class="text-right text-sm">
-                    <div class="font-medium">{{ auth()->user()->displayName() }}</div>
-                    <div class="text-slate-500">{{ auth()->user()->getRoleNames()->join(', ') }}</div>
+                    <div class="font-medium" style="font-size: 20px;">{{ auth()->user()->displayName() }}</div>
+                    <div class="text-slate-500" style="font-size: 20px;">ตำแหน่ง {{ auth()->user()->position }}</div>
                 </div>
             </div>
         </header>

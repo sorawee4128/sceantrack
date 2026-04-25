@@ -78,7 +78,7 @@ class AutopsyCaseController extends Controller
 
         return redirect()->route('autopsy-cases.index', $autopsyCase)->with(
             'success',
-            'ส่ง Autopsy Case เรียบร้อยแล้ว'
+            'ส่งสถานะรายงานการผ่าชันสูตรศพเรียบร้อยแล้ว'
         );
     }
 
@@ -130,7 +130,7 @@ class AutopsyCaseController extends Controller
 
         return redirect()->route('approve-autopsy-cases.index', $autopsyCase)->with(
             'success',
-            'อัปเดตและส่ง Autopsy Case เรียบร้อยแล้ว'
+            'อัปเดตและส่งสถานะรายงานการผ่าชันสูตรศพเรียบร้อยแล้ว'
         );
     }
 

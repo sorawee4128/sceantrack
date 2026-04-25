@@ -83,7 +83,13 @@ class SceneServiceFeeController extends Controller
         $query = SceneCase::query()
             ->with(['doctor', 'assistant'])
             ->where('status', 'submitted');
-        
+     
+        if (!$request->user()->hasRole('system')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('doctor_user_id', $request->user()->id)
+                    ->orWhere('assistant_user_id', $request->user()->id);
+            });
+        }
         if ($request->filled('month')) {
             $month = Carbon::createFromFormat('Y-m', $request->month);
             $query->whereBetween('case_date', [

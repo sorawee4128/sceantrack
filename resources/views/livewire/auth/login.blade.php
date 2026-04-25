@@ -1,22 +1,19 @@
 <x-layouts::auth :title="'เข้าสู่ระบบ'">
-    <div class="w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 p-8 shadow-lg">
-        <div class="mb-7 text-center">
+    <div class="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div class="mb-8 text-center">
             <img
                 src="{{ asset('images/logo.png') }}"
                 alt="Forensics Logo"
-                class="mx-auto mb-4 h-28 w-28 object-contain"
+                class="mx-auto mb-5 h-24 w-24 object-contain"
             >
 
-            <h1 class="text-2xl font-bold text-slate-900">
-                Forensics
-            </h1>
-
-            <p class="mt-2 text-sm font-medium text-slate-500">
+            <h1 class="text-xl font-bold text-slate-900">Forensics</h1>
+            <p class="mt-2 text-sm text-slate-500">
                 ระบบจัดการตารางเวรและข้อมูลการชันสูตรศพ
             </p>
         </div>
 
-        <x-auth-session-status class="mb-4 text-center" :status="session('status')" />
+        <x-auth-session-status class="mb-4 text-center text-sm" :status="session('status')" />
 
         <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
             @csrf
@@ -45,7 +42,7 @@
 
                 @if (Route::has('password.request'))
                     <flux:link
-                        class="absolute top-0 end-0 text-sm font-semibold text-slate-500 hover:text-blue-600"
+                        class="absolute top-0 end-0 text-sm text-slate-400 hover:text-slate-700"
                         :href="route('password.request')"
                         wire:navigate
                     >
@@ -63,7 +60,7 @@
             <flux:button
                 variant="primary"
                 type="submit"
-                class="w-full rounded-xl bg-slate-900 py-3 font-semibold text-white shadow-md hover:bg-slate-800"
+                class="w-full rounded-xl bg-slate-900 py-3 font-semibold text-white hover:bg-slate-800"
                 data-test="login-button"
             >
                 เข้าสู่ระบบ

@@ -50,8 +50,7 @@ class ApproveAutopsyCaseController extends Controller
             // staff ทำได้เฉพาะ pending และยังไม่เกิน 24 ชม.
             elseif (
                 $user->hasRole('staff') &&
-                $case->status === 'pending' &&
-                ! $isExpired
+                $case->status === 'pending'
             ) {
                 $canAction = true;
             }
@@ -60,8 +59,7 @@ class ApproveAutopsyCaseController extends Controller
             elseif (
                 $user->hasRole('doctor') &&
                 $case->status === 'submitted' &&
-                $user->id == $case->doctor_user_id &&
-                ! $isExpired
+                $user->id == $case->doctor_user_id
             ) {
                 $canAction = true;
             }

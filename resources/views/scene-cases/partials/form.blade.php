@@ -3,6 +3,104 @@
     $selectedShift = isset($sceneCase) ? $sceneCase->shift : null;
 @endphp
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+
+<style>
+/* ===== MINIMAL SELECT ===== */
+.ts-wrapper {
+    width: 100%;
+}
+.ts-dropdown .option[data-value=""] {
+
+    display: none;
+
+}
+.ts-wrapper.single .ts-control {
+    min-height: 48px;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 0 2.5rem 0 0.9rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #0f172a;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    transition: all .15s ease;
+}
+
+/* hover */
+.ts-wrapper.single .ts-control:hover {
+    border-color: #cbd5e1;
+}
+
+/* focus */
+.ts-wrapper.focus .ts-control {
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, .15);
+}
+
+/* input text */
+.ts-control input {
+    font-size: 0.875rem;
+}
+
+/* arrow */
+.ts-wrapper.single .ts-control::after {
+    border-color: #94a3b8 transparent transparent transparent;
+    right: 0.75rem;
+}
+
+/* ===== DROPDOWN ===== */
+.ts-dropdown {
+    margin-top: 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, .08);
+    overflow: hidden;
+    font-size: 0.875rem;
+}
+
+/* option */
+.ts-dropdown .option {
+    padding: 10px 14px;
+    color: #334155;
+}
+
+/* hover */
+.ts-dropdown .option:hover {
+    background: #f8fafc;
+}
+
+/* active */
+.ts-dropdown .active {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* selected */
+.ts-dropdown .selected {
+    background: #eef2ff;
+    color: #2563eb;
+}
+
+/* no result */
+.ts-dropdown .no-results {
+    padding: 10px 14px;
+    color: #94a3b8;
+}
+
+/* remove shadow default */
+.ts-wrapper .ts-control,
+.ts-wrapper .ts-dropdown {
+    box-shadow: none !important;
+}
+</style>
+@endpush
+
 <div x-data="sceneCaseForm()" x-init="init('{{ $selectedShiftId }}')" class="space-y-6">
     <div class="form-section">
         <div class="mb-4">
@@ -12,7 +110,7 @@
         <div class="form-grid">
             <div class="form-group">
                 <label class="form-label">กะเวร</label>
-                <select name="shift_id" x-model="shiftId" @change="loadShift()" class="form-select">
+                <select name="shift_id" x-model="shiftId" @change="loadShift()" class="form-select searchable-select">
                     <option value="">-- เลือกกะเวร --</option>
                     @foreach ($shifts as $shift)
                         <option value="{{ $shift->id }}" @selected($selectedShiftId == $shift->id)>
@@ -62,7 +160,7 @@
 
             <div class="form-group">
                 <label class="form-label">สถานีตำรวจ</label>
-                <select name="police_station_id" class="form-select">
+                <select name="police_station_id" class="form-select searchable-select">
                     <option value="">-- เลือกสถานีตำรวจ --</option>
                     @foreach ($policeStations as $item)
                         <option value="{{ $item->id }}" @selected(old('police_station_id', $sceneCase->police_station_id ?? '') == $item->id)>
@@ -92,11 +190,6 @@
                 >
             </div>
 
-            {{-- <div class="form-group md:col-span-2">
-                <label class="form-label">สถานที่เกิดเหตุ</label>
-                <input type="text" name="incident_location" value="{{ old('incident_location', $sceneCase->incident_location ?? '') }}" class="form-input">
-            </div> --}}
-
             <div class="form-group">
                 <label class="form-label">ชื่อผู้เสียชีวิต</label>
                 <input
@@ -109,7 +202,7 @@
 
             <div class="form-group">
                 <label class="form-label">เพศ</label>
-                <select name="gender_id" class="form-select">
+                <select name="gender_id" class="form-select searchable-select">
                     <option value="">-- เลือกเพศ --</option>
                     @foreach ($genders as $item)
                         <option value="{{ $item->id }}" @selected(old('gender_id', $sceneCase->gender_id ?? '') == $item->id)>
@@ -132,7 +225,7 @@
 
             <div class="form-group">
                 <label class="form-label">การจัดการศพ</label>
-                <select name="body_handling_id" class="form-select">
+                <select name="body_handling_id" class="form-select searchable-select">
                     <option value="">-- เลือกการจัดการศพ --</option>
                     @foreach ($bodyHandlings as $item)
                         <option value="{{ $item->id }}" @selected(old('body_handling_id', $sceneCase->body_handling_id ?? '') == $item->id)>
@@ -144,7 +237,7 @@
 
             <div class="form-group">
                 <label class="form-label">ประเภทที่แจ้ง</label>
-                <select name="notification_type_id" class="form-select">
+                <select name="notification_type_id" class="form-select searchable-select">
                     <option value="">-- เลือกประเภทที่แจ้ง --</option>
                     @foreach ($notificationTypes as $item)
                         <option value="{{ $item->id }}" @selected(old('notification_type_id', $sceneCase->notification_type_id ?? '') == $item->id)>
@@ -354,3 +447,44 @@
         }
     </script>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.searchable-select').forEach(function (el) {
+        if (el.tomselect) return;
+
+        new TomSelect(el, {
+            create: false,
+            allowEmptyOption: true,
+            placeholder: 'ค้นหา...',
+            maxOptions: 1000,
+            searchField: ['text'],
+            hideSelected: true,
+
+            render: {
+                no_results: function () {
+                    return '<div class="no-results">ไม่พบข้อมูล</div>';
+                }
+            },
+
+            onFocus: function () {
+                if (this.getValue() === '') {
+                    this.clear(true);
+                    this.setTextboxValue('');
+                }
+            },
+
+            onType: function (str) {
+                if (this.getValue() !== '') {
+                    this.clear(false);
+                    this.setTextboxValue(str);
+                    this.refreshOptions(false);
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush

@@ -19,8 +19,8 @@ class StoreSceneCaseRequest extends FormRequest
         $required = $this->isSubmitting() ? ['required'] : ['nullable'];
 
         return [
-            'shift_id' => array_merge($required, ['exists:shifts,id']),
-            'scene_no' => array_merge($required, ['string', 'max:100']),
+            'shift_id' => ['required', 'exists:shifts,id'],
+            'scene_no' => ['required', 'string', 'max:100'],
             'case_date' => array_merge($required, ['date']),
             'notified_time' => ['nullable'],
             'arrival_time' => ['nullable'],

@@ -213,7 +213,7 @@
 
                         @if($case->canAction)
 
-                            @if(auth()->user()->hasRole('staff'))
+                            @if(!$case->isExpired == true && auth()->user()->hasRole('staff'))
                                 <a href="{{ route('autopsy-cases.edit', $case) }}" class="btn btn-outline btn-sm">
                                     แก้ไข
                                 </a>
