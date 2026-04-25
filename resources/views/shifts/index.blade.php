@@ -123,6 +123,7 @@
             <h2 class="text-lg font-semibold">ปฏิทิน</h2>
             {{-- ขวา --}}
             <div class="flex items-center gap-2">
+                @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('system'))
                 <form method="POST" action="{{ route('shifts.auto-generate-year') }}">
                     @csrf
                     <input type="hidden" name="year" value="{{ request('year', now()->year) }}">
@@ -130,6 +131,7 @@
                         Auto Generate เวรทั้งปี
                     </button>
                 </form>
+                @endif
                 <a href="{{ route('shifts.create') }}" class="btn btn-primary">
                     + เพิ่มกะเวร
                 </a>
