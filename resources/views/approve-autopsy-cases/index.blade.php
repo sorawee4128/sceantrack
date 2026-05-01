@@ -219,16 +219,18 @@
                                 </a>
                             @endif
 
-                            <a href="{{ route('approve-autopsy-cases.submitted', $case) }}"
-                               class="btn btn-primary-soft btn-sm">
+                            @if(!auth()->user()->hasRole('admin') || !auth()->user()->hasRole('system'))
+                                <a href="{{ route('approve-autopsy-cases.submitted', $case) }}"
+                                class="btn btn-primary-soft btn-sm">
 
-                                @if(auth()->user()->hasRole('doctor'))
-                                    อนุมัติ
-                                @elseif (auth()->user()->hasRole('staff'))
-                                    เสนอ
-                                @endif
+                                    @if(auth()->user()->hasRole('doctor'))
+                                        อนุมัติ
+                                    @else
+                                        เสนอ
+                                    @endif
 
-                            </a>
+                                </a>
+                            @endif
 
                         @endif
 
