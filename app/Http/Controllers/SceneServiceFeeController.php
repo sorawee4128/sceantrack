@@ -6,7 +6,9 @@ use App\Models\SceneCase;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 
 class SceneServiceFeeController extends Controller
 {
@@ -83,13 +85,14 @@ class SceneServiceFeeController extends Controller
         $query = SceneCase::query()
             ->with(['doctor', 'assistant'])
             ->where('status', 'submitted');
-     
-        if (!$request->user()->hasRole('system')) {
+        if (! $request->user()->hasRole('system')) {
             $query->where(function ($q) use ($request) {
                 $q->where('doctor_user_id', $request->user()->id)
                     ->orWhere('assistant_user_id', $request->user()->id);
             });
+
         }
+
         if ($request->filled('month')) {
             $month = Carbon::createFromFormat('Y-m', $request->month);
             $query->whereBetween('case_date', [
@@ -115,14 +118,73 @@ class SceneServiceFeeController extends Controller
                 'rate' => $rate,
                 'total' => $userCases->count() * $rate,
             ];
+
         })->filter(fn ($row) => $row['cases']->count() > 0)->values();
-        $pdf = Pdf::loadView('scene-service-fee.pdf', [
+        $html = view('scene-service-fee.pdf', [
             'rows' => $rows,
             'role' => $role,
             'roleLabel' => $roleLabel,
             'rate' => $rate,
             'monthText' => $monthText,
-        ])->setPaper('a4', 'portrait');
-        return $pdf->stream("ค่าตอบแทน({$roleLabel}).pdf");
+        ])->render();
+
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $mpdf = new Mpdf([
+
+    'mode' => 'utf-8',
+
+    'format' => 'A4',
+
+    'default_font' => 'thsarabun',
+
+    'autoScriptToLang' => true,
+
+    'autoLangToFont' => true,
+
+    'useOTL' => 0xFF,
+
+    'tempDir' => storage_path('app/mpdf-temp'),
+
+    'margin_left' => 14,
+
+    'margin_right' => 14,
+
+    'margin_top' => 12,
+
+    'margin_bottom' => 95,
+
+    'margin_footer' => 6,
+
+    'fontDir' => array_merge($fontDirs, [
+
+        storage_path('fonts'),
+
+    ]),
+
+    'fontdata' => $fontData + [
+
+        'thsarabun' => [
+
+            'R'  => 'THSarabunNew.ttf',
+
+            'B'  => 'THSarabunNew Bold.ttf',
+
+            'I'  => 'THSarabunNew Italic.ttf',
+
+            'BI' => 'THSarabunNew BoldItalic.ttf',
+
+        ],
+
+    ],
+
+]);
+
+        $mpdf->WriteHTML($html);
+        return response(
+            $mpdf->Output("ค่าตอบแทน({$roleLabel}).pdf", 'S')
+        )->header('Content-Type', 'application/pdf');
     }
 }

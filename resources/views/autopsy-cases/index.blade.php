@@ -36,11 +36,12 @@
                             <div>แพทย์. {{ $case->doctor?->displayName() }}</div>
                             <div>ผู้ช่วยแพทย์. {{ $case->assistant?->displayName() }}</div>
                         </td>
-                        <td class="text-right">
+                        <td class="">
                             @if(!auth()->user()->hasRole('admin'))
-                            <a href="{{ route('autopsy-cases.scene-cases.create', $case->id) }}" class="btn btn-secondary">
-                                คลิกเพื่อใส่ข้อมูล
-                            </a>
+                                <a href="{{ route('autopsy-cases.scene-cases.create', $case->id) }}"
+                                class="btn btn-secondary text-nowrap" style="white-space: nowrap;">
+                                    คลิกเพื่อใส่ข้อมูล
+                                </a>
                             @endif
                         </td>
                     </tr>

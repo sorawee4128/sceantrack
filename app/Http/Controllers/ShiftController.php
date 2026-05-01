@@ -112,31 +112,43 @@ class ShiftController extends Controller
     public function autoGenerateYear(Request $request)
     {
         $this->authorize('manage shifts');
+
         $year = $request->input('year', now()->year);
-        $doctors = User::role('doctor')->get();
-        $assistants = User::role('assistant')->get();
+
+        // เรียงรายชื่อให้คงที่ เช่น ตาม id
+        $doctors = User::role('doctor')->orderBy('id')->get();
+        $assistants = User::role('assistant')->orderBy('id')->get();
+            dd($assistants);
         if ($doctors->isEmpty() || $assistants->isEmpty()) {
             return back()->with('error', 'ไม่พบข้อมูลแพทย์หรือผู้ช่วยแพทย์');
         }
 
         $created = 0;
         $skipped = 0;
+
         DB::transaction(function () use ($year, $doctors, $assistants, &$created, &$skipped) {
             $period = CarbonPeriod::create(
                 "{$year}-01-01",
                 "{$year}-12-31"
             );
+
+            $doctorIndex = 0;
+            $assistantIndex = 0;
+
             foreach ($period as $date) {
                 foreach ([ShiftType::DAY, ShiftType::NIGHT] as $shiftType) {
                     $exists = Shift::whereDate('shift_date', $date)
                         ->where('shift_type', $shiftType->value)
                         ->exists();
+
                     if ($exists) {
                         $skipped++;
                         continue;
                     }
-                    $doctor = $doctors->random();
-                    $assistant = $assistants->random();
+
+                    $doctor = $doctors[$doctorIndex];
+                    $assistant = $assistants[$assistantIndex];
+
                     Shift::create([
                         'shift_date' => $date->format('Y-m-d'),
                         'shift_type' => $shiftType->value,
@@ -145,14 +157,26 @@ class ShiftController extends Controller
                         'created_by' => auth()->id(),
                         'updated_by' => auth()->id(),
                     ]);
+
                     $created++;
+
+                    $doctorIndex++;
+                    $assistantIndex++;
+
+                    if ($doctorIndex >= $doctors->count()) {
+                        $doctorIndex = 0;
+                    }
+
+                    if ($assistantIndex >= $assistants->count()) {
+                        $assistantIndex = 0;
+                    }
                 }
             }
         });
 
         return back()->with(
             'success',
-            "สร้างเวรปี {$year} เรียบร้อยแล้ว: เพิ่ม {$created} รายการ, ข้าม {$skipped} รายการ"
+            "สร้างตารางเวรเรียบร้อยแล้ว"
         );
     }
 }

@@ -6,8 +6,8 @@ use App\Models\AutopsyCase;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use Mpdf\Mpdf;
 
 class ApproveAutopsyCaseController extends Controller
 {
@@ -83,6 +83,7 @@ class ApproveAutopsyCaseController extends Controller
             'doctor',
             'lab',
         ])->findOrFail($request->autopsy_id);
+
         $status = 'submitted';
         if ($case->status === 'submitted') {
             $status = 'approve';
@@ -90,6 +91,7 @@ class ApproveAutopsyCaseController extends Controller
 
         $case->status = $status;
         $case->save();
+
         if ($case->status === 'approve') {
             if (! $case->policeStation?->email) {
                 return redirect()
@@ -97,16 +99,65 @@ class ApproveAutopsyCaseController extends Controller
                     ->with('error', 'อนุมัติแล้ว แต่ไม่พบอีเมลสถานีตำรวจ');
             }
 
-            $pdf = Pdf::loadView('approve-autopsy-cases.notice-pdf', [
+            $html = view('approve-autopsy-cases.notice-pdf', [
                 'case' => $case,
-            ])->setPaper('a4', 'portrait');
+            ])->render();
+
+            $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+            $fontDirs = $defaultConfig['fontDir'];
+            $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+            $fontData = $defaultFontConfig['fontdata'];
+            $mpdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => 'A4',
+                'margin_left' => 20,
+                'margin_right' => 20,
+                'margin_top' => 30,
+                'margin_bottom' => 35,
+                'margin_footer' => 8,
+                'default_font' => 'thsarabun',
+                'autoScriptToLang' => true,
+                'autoLangToFont' => true,
+                'useOTL' => 0xFF,
+                'tempDir' => storage_path('app/mpdf-temp'),
+                'fontDir' => array_merge($fontDirs, [
+                    storage_path('fonts'),
+
+                ]),
+
+                'fontdata' => $fontData + [
+                    'thsarabun' => [
+                        'R'  => 'THSarabunNew.ttf',
+                        'B'  => 'THSarabunNew Bold.ttf',
+                        'I'  => 'THSarabunNew Italic.ttf',
+                        'BI' => 'THSarabunNew BoldItalic.ttf',
+                    ],
+                ],
+
+            ]);
+
+            $mpdf->SetHTMLFooter('
+                <div style="font-family: thsarabun; font-size: 22px; line-height:1.45;">
+                    <div style="font-weight:bold;">หมายเหตุ</div>
+                    <div>
+                        สามารถติดต่อขอรับเอกสารได้ที่แผนกนิติเวช กองพยาธิกรรม
+                        โรงพยาบาลภูมิพลอดุลยเดช กรมแพทย์ทหารอากาศ
+                        ห้องหมายเลข 1 อาคาร 14 โทร 02-534-7406
+                    </div>
+                </div>
+            ');
+
+            $mpdf->WriteHTML($html);
+
+            $pdfContent = $mpdf->Output('', 'S');
+
             Mail::send('emails.autopsy-approved', [
                 'case' => $case,
-            ], function ($message) use ($case, $pdf) {
+            ], function ($message) use ($case, $pdfContent) {
                 $message->to($case->policeStation->email)
                     ->subject('แจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์ เลขที่ ' . $case->autopsy_no)
                     ->attachData(
-                        $pdf->output(),
+                        $pdfContent,
                         'แจ้งเตือนสถานะรายงาน-' . $case->autopsy_no . '.pdf',
                         [
                             'mime' => 'application/pdf',
@@ -118,5 +169,79 @@ class ApproveAutopsyCaseController extends Controller
         return redirect()
             ->route('approve-autopsy-cases.index')
             ->with('success', 'อัปเดตสถานะเรียบร้อยแล้ว');
+    }
+
+    public function noticePdf(AutopsyCase $case)
+    {
+        $this->authorize('manage autopsy cases');
+        $case->load([
+            'policeStation',
+            'scene',
+            'doctor',
+            'lab',
+        ]);
+
+        if ($case->status !== 'approve') {
+            abort(403, 'เอกสารนี้เปิดดูได้เฉพาะเคสที่อนุมัติแล้ว');
+        }
+
+        $html = view('approve-autopsy-cases.notice-pdf', [
+            'case' => $case,
+        ])->render();
+
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            // 🔥 margin ให้ตรงกับ layout
+            'margin_left' => 20,
+            'margin_right' => 20,
+            'margin_top' => 30,
+            'margin_bottom' => 35,
+            'margin_footer' => 8,
+            'default_font' => 'thsarabun',
+            'autoScriptToLang' => true,
+            'autoLangToFont' => true,
+            'useOTL' => 0xFF,
+            'tempDir' => storage_path('app/mpdf-temp'),
+            'fontDir' => array_merge($fontDirs, [
+                storage_path('fonts'),
+            ]),
+
+            'fontdata' => $fontData + [
+                'thsarabun' => [
+                    'R'  => 'THSarabunNew.ttf',
+                    'B'  => 'THSarabunNew Bold.ttf',
+                    'I'  => 'THSarabunNew Italic.ttf',
+                    'BI' => 'THSarabunNew BoldItalic.ttf',
+                ],
+
+            ],
+
+        ]);
+
+        // ✅ footer ใช้ font/size เดียวกับ body
+
+        $mpdf->SetHTMLFooter('
+
+            <div style="font-family: thsarabun; font-size: 22px; line-height:1.45;">
+                <div style="font-weight:bold;">หมายเหตุ</div>
+                <div>
+                    สามารถติดต่อขอรับเอกสารได้ที่แผนกนิติเวช กองพยาธิกรรม
+                    โรงพยาบาลภูมิพลอดุลยเดช กรมแพทย์ทหารอากาศ
+                    ห้องหมายเลข 1 อาคาร 14 โทร 02-534-7406
+                </div>
+            </div>
+        ');
+
+        $mpdf->WriteHTML($html);
+
+        return response(
+            $mpdf->Output('แจ้งเตือนสถานะรายงาน-' . $case->autopsy_no . '.pdf', 'S')
+        )->header('Content-Type', 'application/pdf');
+
     }
 }

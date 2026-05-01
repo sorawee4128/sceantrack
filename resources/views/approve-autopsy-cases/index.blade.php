@@ -232,6 +232,13 @@
 
                         @endif
 
+                        @if ($case->status === 'approve')
+                            <a href="{{ route('approve-autopsy-cases.notice-pdf', $case) }}"
+                            target="_blank"
+                            class="btn btn-primary-soft btn-sm">
+                                PDF
+                            </a>
+                        @endif
                     </div>
                 </td>
 

@@ -128,7 +128,7 @@
                     @csrf
                     <input type="hidden" name="year" value="{{ request('year', now()->year) }}">
                     <button class="btn btn-secondary">
-                        Auto Generate เวรทั้งปี
+                        Auto Generate ตารางเวร
                     </button>
                 </form>
                 @endif

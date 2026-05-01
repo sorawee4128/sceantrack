@@ -1,166 +1,156 @@
 <!doctype html>
 <html lang="th">
 <head>
-    <meta charset="utf-8">
-    <style>
-        @font-face {
-            font-family: 'Sarabun';
-            src: url("{{ storage_path('fonts/Sarabun-Regular.ttf') }}") format('truetype');
-            font-weight: normal;
-        }
+<meta charset="utf-8">
+<style>
+    * {
+        font-family: thsarabun !important;
+        font-size: 18px;
+    }
 
-        @font-face {
-            font-family: 'Sarabun';
-            src: url("{{ storage_path('fonts/Sarabun-Bold.ttf') }}") format('truetype');
-            font-weight: bold;
-        }
+    body {
+        margin: 0;
+        color: #111;
+    }
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            font-size: 18px;
-            color: #111;
-            margin: 0;
-        }
+    .header-box {
+        border: 1.5px solid #000;
+        border-radius: 12px;
+        padding: 12px 16px;
+    }
 
-        .page {
-            padding: 28px 34px;
-            position: relative;
-            min-height: 1000px;
-        }
+    .header-table {
+        width: 100%;
+    }
 
-        .header-box {
-            border: 1.5px solid #111;
-            border-radius: 14px;
-            padding: 10px 16px;
-        }
+    .logo {
+        width: 70px;
+    }
 
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    .title {
+        text-align: center;
+        line-height: 1.4;
+    }
 
-        .logo {
-            width: 70px;
-        }
+    .title-main {
+        font-size: 22px;
+        font-weight: bold;
+    }
 
-        .title {
-            text-align: center;
-            font-weight: bold;
-            line-height: 1.35;
-        }
+    .sub-title {
+        font-size: 16px;
+    }
 
-        .title-main {
-            font-size: 24px;
-        }
+    .info-table {
+        width: 100%;
+        margin-top: 18px;
+        border-collapse: collapse;
+    }
 
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
+    .info-table td {
+        padding: 4px 6px;
+        vertical-align: top;
+    }
 
-        .info-table td {
-            padding: 3px 6px;
-            vertical-align: top;
-        }
+    .label {
+        font-weight: bold;
+        width: 140px;
+    }
 
-        .label {
-            font-weight: bold;
-            text-decoration: underline;
-            white-space: nowrap;
-        }
+    .line {
+        border-bottom: 1px solid #000;
+        display: inline-block;
+        min-width: 120px;
+    }
 
-        .line {
-            border-top: 1px solid #111;
-            margin: 14px 0;
-        }
+    .divider {
+        border-top: 1px solid #000;
+        margin: 16px 0;
+    }
 
-        .content {
-            line-height: 1.55;
-            margin-top: 12px;
-        }
+    .content {
+        margin-top: 10px;
+        line-height: 1.6;
+    }
 
-        .indent {
-            margin-left: 58px;
-        }
+    .indent {
+        margin-left: 50px;
+    }
 
-        .footer-note {
-            position: absolute;
-            bottom: 42px;
-            left: 34px;
-            right: 34px;
-            line-height: 1.45;
-        }
+    .section-title {
+        font-weight: bold;
+        margin-top: 10px;
+    }
 
-        .bold {
-            font-weight: bold;
-        }
-    </style>
+    .bold {
+        font-weight: bold;
+    }
+</style>
 </head>
-<body>
-<div class="page">
-    <div class="header-box">
-        <table class="header-table">
-            <tr>
-                <td style="width:90px;">
-                    <img src="{{ public_path('images/logo.png') }}" class="logo">
-                </td>
-                <td class="title">
-                    <div class="title-main">แจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์</div>
-                    <div>แผนกนิติเวช กองพยาธิกรรม โรงพยาบาลภูมิพลอดุลยเดช กรมแพทย์ทหารอากาศ</div>
-                    <div>ห้องหมายเลข 1 อาคาร 14 รพ.ภูมิพลอดุลยเดช แขวงคลองถนน เขตสายไหม กทม. โทร 02-534-7406</div>
-                </td>
-            </tr>
-        </table>
-    </div>
 
-    <table class="info-table">
+<body>
+
+<!-- HEADER -->
+<div class="header-box">
+    <table class="header-table">
         <tr>
-            <td class="label">เลขที่รายงาน</td>
-            <td>{{ $case->autopsy_no ?: '-' }}</td>
-            <td class="label">สถานีตำรวจที่นำส่ง</td>
-            <td>{{ $case->policeStation?->name ?: '-' }}</td>
-        </tr>
-        <tr>
-            <td class="label">ชื่อผู้ตาย</td>
-            <td>{{ $case->scene?->deceased_name ?: '-' }}</td>
-            <td class="label">อายุ</td>
-            <td>{{ $case->scene?->age ?: '-' }} ปี</td>
-        </tr>
-        <tr>
-            <td class="label">สัญชาติ</td>
-            <td>{{ $case->scene?->nationality ?: '-' }}</td>
-            <td class="label">วันที่ผ่าพิสูจน์</td>
-            <td>{{ optional($case->autopsy_date)->format('d/m/Y') ?: '-' }}</td>
+            <td style="width:90px;">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
+            </td>
+            <td class="title">
+                <div class="title-main">แจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์</div>
+                <div class="sub-title">แผนกนิติเวช กองพยาธิกรรม โรงพยาบาลภูมิพลอดุลยเดช</div>
+                <div class="sub-title">กรมแพทย์ทหารอากาศ โทร 02-534-7406</div>
+            </td>
         </tr>
     </table>
+</div>
 
-    <div class="line"></div>
+<!-- INFO -->
+<table class="info-table">
+    <tr>
+        <td class="label">เลขที่รายงาน</td>
+        <td><span class="line">{{ $case->autopsy_no ?: '-' }}</span></td>
 
-    <div class="content">
-        <p class="bold">
-            เรียน เจ้าหน้าที่{{ $case->policeStation?->name ?: 'สถานีตำรวจ' }}
-        </p>
+        <td class="label">สถานีตำรวจ</td>
+        <td><span class="line">{{ $case->policeStation?->name ?: '-' }}</span></td>
+    </tr>
 
-        <p>
-            ทางแผนกนิติเวช กองพยาธิกรรม โรงพยาบาลภูมิพลอดุลยเดช กรมแพทย์ทหารอากาศ
-            ขอแจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์ ดังนี้
-        </p>
+    <tr>
+        <td class="label">ชื่อผู้ตาย</td>
+        <td><span class="line">{{ $case->scene?->deceased_name ?: '-' }}</span></td>
 
-        <div class="indent">
-            <div class="bold">รายละเอียดคดี</div>
-            <div>สถานะรายงาน : สถานะเสร็จสมบูรณ์</div>
-        </div>
-    </div>
+        <td class="label">อายุ</td>
+        <td><span class="line">{{ $case->scene?->age ?: '-' }}</span> ปี</td>
+    </tr>
 
-    <div class="footer-note">
-        <div class="bold">หมายเหตุ</div>
-        <div>
-            สามารถติดต่อขอรับเอกสารได้ที่แผนกนิติเวช กองพยาธิกรรม โรงพยาบาลภูมิพลอดุลยเดช
-            กรมแพทย์ทหารอากาศ ห้องหมายเลข 1 อาคาร 14 รพ.ภูมิพลอดุลยเดช แขวงคลองถนน
-            เขตสายไหม กทม. โทร 02-534-7406
-        </div>
+    <tr>
+        <td class="label">สัญชาติ</td>
+        <td><span class="line">{{ $case->scene?->nationality ?: '-' }}</span></td>
+
+        <td class="label">วันที่ผ่าพิสูจน์</td>
+        <td><span class="line">{{ optional($case->autopsy_date)->format('d/m/Y') ?: '-' }}</span></td>
+    </tr>
+</table>
+
+<div class="divider"></div>
+
+<!-- CONTENT -->
+<div class="content">
+    <p class="bold">
+        เรียน เจ้าหน้าที่{{ $case->policeStation?->name ?: 'สถานีตำรวจ' }}
+    </p>
+
+    <p>
+        ทางแผนกนิติเวช กองพยาธิกรรม โรงพยาบาลภูมิพลอดุลยเดช กรมแพทย์ทหารอากาศ
+        ขอแจ้งความคืบหน้ารายงานตรวจศพทางนิติเวชศาสตร์ ดังนี้
+    </p>
+
+    <div class="indent">
+        <div class="section-title">รายละเอียดคดี</div>
+        <div>สถานะรายงาน : <span class="bold">เสร็จสมบูรณ์</span></div>
     </div>
 </div>
+
 </body>
 </html>

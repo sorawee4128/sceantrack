@@ -88,6 +88,9 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::resource('autopsy-assistants', AutopsyAssistantController::class)->except(['show']);
         Route::resource('photo-assistants', PhotoAssistantController::class)->except(['show']);
     });
+
+    Route::get('/approve-autopsy-cases/{case}/notice-pdf', [ApproveAutopsyCaseController::class, 'noticePdf'])
+    ->name('approve-autopsy-cases.notice-pdf');
 });
 
 require __DIR__.'/settings.php';

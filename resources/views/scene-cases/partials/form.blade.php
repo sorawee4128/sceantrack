@@ -109,7 +109,7 @@
 
         <div class="form-grid">
             <div class="form-group">
-                <label class="form-label">กะเวร</label>
+                <label class="form-label"><span style="color:red">*</span> กะเวร</label>
                 <select name="shift_id" x-model="shiftId" @change="loadShift()" class="form-select searchable-select">
                     <option value="">-- เลือกกะเวร --</option>
                     @foreach ($shifts as $shift)
@@ -121,12 +121,14 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">หมายเลขชันสูตรศพ</label>
+                <label class="form-label"><span style="color:red">*</span> หมายเลขชันสูตรศพ</label>
                 <input
                     type="text"
                     name="scene_no"
                     value="{{ old('scene_no', $sceneCase->scene_no ?? '') }}"
                     class="form-input"
+                    require
+                    placeholder="* จำเป็นต้องระบุ"
                 >
             </div>
 
