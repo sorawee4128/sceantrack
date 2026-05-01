@@ -224,7 +224,7 @@
 
                                 @if(auth()->user()->hasRole('doctor'))
                                     อนุมัติ
-                                @else
+                                @elseif (auth()->user()->hasRole('staff'))
                                     เสนอ
                                 @endif
 
