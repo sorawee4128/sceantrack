@@ -219,7 +219,7 @@
                                 </a>
                             @endif
 
-                            @if(!auth()->user()->hasRole('admin') || !auth()->user()->hasRole('system'))
+                            @if(!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('system'))
                                 <a href="{{ route('approve-autopsy-cases.submitted', $case) }}"
                                 class="btn btn-primary-soft btn-sm">
 
