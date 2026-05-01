@@ -118,7 +118,6 @@ class ShiftController extends Controller
         // เรียงรายชื่อให้คงที่ เช่น ตาม id
         $doctors = User::role('doctor')->orderBy('id')->get();
         $assistants = User::role('assistant')->orderBy('id')->get();
-            dd($assistants);
         if ($doctors->isEmpty() || $assistants->isEmpty()) {
             return back()->with('error', 'ไม่พบข้อมูลแพทย์หรือผู้ช่วยแพทย์');
         }
