@@ -20,8 +20,8 @@
      class="absolute top-4 right-4 h-10 w-10 object-contain opacity-90"
 style="height: 70%;width: 25%;"
      alt="logo">
-        <div class="text-xl font-bold text-white">Forensics</div>
-        <div class="mt-1 text-sm text-slate-400">Product</div>
+        <div class="text-xl font-bold text-white">แผนกนิติเวช</div>
+        <div class="mt-1 text-sm text-slate-400">โรงพยาบาลภูมิพลอดุลยเดช</div>
     </div>
 
     <nav class="flex-1 space-y-1 overflow-y-auto px-4 py-5 text-sm">
