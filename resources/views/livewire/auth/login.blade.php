@@ -6,7 +6,8 @@
             <img src="{{ asset('images/logo.png') }}">
         </div>
 
-        <h1 class="text-xl font-semibold text-slate-900">Forensics</h1>
+        <h1 class="text-xl font-semibold text-slate-900">นิติเวช</h1>
+     
         <p class="text-sm text-slate-500 mt-1">
             ระบบจัดการตารางเวรและข้อมูลการชันสูตรศพ
         </p>
