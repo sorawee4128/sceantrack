@@ -62,7 +62,7 @@ style="height: 70%;width: 25%;"
             @can('manage autopsy cases')
                 <a href="{{ route('autopsy-cases.index') }}"
                    class="{{ $linkClass }} {{ request()->routeIs('autopsy-cases.*') ? $activeClass : $inactiveClass }}">
-                    สถานะรายงานการผ่าชันสูตรศพ
+                    ลงข้อมูลการผ่าชันสูตรศพ
                 </a>
             @endcan
         @endif
@@ -70,7 +70,7 @@ style="height: 70%;width: 25%;"
         @can('manage autopsy cases')
             <a href="{{ route('approve-autopsy-cases.index') }}"
                class="{{ $linkClass }} {{ request()->routeIs('approve-autopsy-cases.*') ? $activeClass : $inactiveClass }}">
-                ลงข้อมูลการผ่าชันสูตรศพ
+                สถานะรายงานการผ่าชันสูตรศพ
             </a>
         @endcan
 
